@@ -6,9 +6,8 @@
 
 An end-to-end Data Analytics & Executive Dashboard project analyzing **148,000+ Uber ride bookings** in the NCR region for the year 2024.
 
-### 🌐 View Live: [https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard](https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard)
 
-![Dashboard Preview](dashboard_preview.png)
+### 🌐 View Live: [https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard](https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard)
 
 ## 🚀 Interactive Dashboard Features
 
