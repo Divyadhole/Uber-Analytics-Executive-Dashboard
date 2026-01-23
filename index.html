@@ -4,22 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Uber Analytics | Interactive Executive Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Uber Analytics | Advanced Executive Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --mint: #4ECDC4;
-      --mint-dark: #3fb3ab;
-      --bg: #f8f9fa;
-      --text: #2c3e50;
-      --card-bg: #ffffff;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       --primary: #3f6ad8;
+      --primary-light: #e0f3ff;
+      --bg: #f1f4f6;
+      --text-main: #495057;
+      --text-muted: #888;
+      --card-bg: #fff;
+      --border: #e9ecef;
       --success: #3ac47d;
       --danger: #d92550;
       --warning: #f7b924;
-      --purple: #6f42c1;
-      --orange: #fd7e14;
+      --info: #16aaff;
+      --radius: 12px;
+      --shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03), 0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05), 0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
     }
 
     * {
@@ -29,80 +30,57 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Outfit', sans-serif;
       background: var(--bg);
-      color: var(--text);
+      color: var(--text-main);
+      font-size: 14px;
       overflow-x: hidden;
-      min-height: 100vh;
     }
 
-    /* --- HEADER --- */
+    /* --- LAYOUT --- */
     header {
-      background: var(--mint);
-      height: 60px;
+      height: 65px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30px;
-      color: white;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 0 40px;
       position: sticky;
       top: 0;
       z-index: 1000;
     }
 
-    .header-title {
+    .header-brand {
+      font-size: 1.4rem;
       font-weight: 700;
-      font-size: 1.2rem;
+      color: #333;
       letter-spacing: -0.5px;
     }
 
-    .header-actions {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .user-chip {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 5px 15px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    /* --- DASHBOARD CANVAS --- */
-    #dashboard-canvas {
+    #dashboard-grid {
       position: relative;
-      width: 100%;
-      height: calc(100vh - 60px);
-      padding: 30px;
+      padding: 40px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 25px;
-      align-content: start;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: minmax(100px, auto);
+      gap: 30px;
+      min-height: 100vh;
     }
 
-    /* --- DRAGGABLE CARDS --- */
+    /* --- CARD STYLES --- */
     .card {
       background: var(--card-bg);
-      border-radius: 12px;
-      padding: 24px;
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
-      border: 1px solid rgba(0, 0, 0, 0.03);
-      cursor: grab;
-      transition: box-shadow 0.2s, transform 0.2s;
-      user-select: none;
-      position: relative;
+      padding: 25px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      min-height: 200px;
-    }
-
-    .card:hover {
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      transform: translateY(-2px);
+      position: relative;
+      cursor: grab;
+      transition: transform 0.2s, box-shadow 0.2s;
+      user-select: none;
+      overflow: hidden;
     }
 
     .card:active {
@@ -110,34 +88,89 @@
     }
 
     .card.dragging {
-      opacity: 0.8;
-      z-index: 100;
-      cursor: grabbing;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-      transform: scale(1.02);
+      opacity: 0.9;
+      z-index: 2000;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border: 2px solid var(--primary);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 5px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #f8f9fa;
+      padding-bottom: 15px;
     }
 
     .card-title {
+      font-size: 0.9rem;
       font-weight: 700;
-      font-size: 1rem;
-      color: #444;
+      color: #666;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    /* --- WIDGET: SALES OVERVIEW --- */
-    .metric-row {
+    /* --- GRID SPANS (Default Layout) --- */
+    .card-metrics {
+      grid-column: span 12;
+    }
+
+    .card-revenue {
+      grid-column: span 8;
+      grid-row: span 3;
+    }
+
+    .card-summary {
+      grid-column: span 4;
+      grid-row: span 3;
+    }
+
+    .card-categories {
+      grid-column: span 6;
+      grid-row: span 4;
+    }
+
+    .card-leaderboard {
+      grid-column: span 6;
+      grid-row: span 4;
+    }
+
+    .card-table {
+      grid-column: span 12;
+    }
+
+    /* --- WIDGET 1: KEY METRICS --- */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .metric-item {
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #f0f3f5;
+      transition: 0.3s;
+    }
+
+    .metric-item:hover {
+      background: #fcfdfe;
+      border-color: var(--primary);
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .metric-val-row {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
+      align-items: baseline;
+      gap: 10px;
     }
 
     .metric-val {
@@ -146,133 +179,128 @@
       color: #333;
     }
 
-    .metric-label {
+    .metric-trend {
       font-size: 0.85rem;
-      color: #888;
-      font-weight: 500;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
     }
 
-    .trend {
-      font-size: 0.75rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .trend.up {
+    .trend-up {
+      background: #e0fbf0;
       color: var(--success);
     }
 
-    .trend.down {
+    .trend-down {
+      background: #fff1f4;
       color: var(--danger);
     }
 
-    .progress-bar-wrap {
+    /* --- WIDGET 2: REVENUE CHART (SVG) --- */
+    .chart-container {
+      position: relative;
+      flex: 1;
+      min-height: 250px;
       width: 100%;
-      height: 8px;
-      background: #eee;
-      border-radius: 4px;
-      margin-top: 5px;
-      overflow: hidden;
+      border-top: 1px solid #f8f9fa;
+      padding-top: 20px;
     }
 
-    .progress-fill {
+    .svg-chart {
+      width: 100%;
       height: 100%;
-      border-radius: 4px;
-      transition: width 0.5s ease-out;
     }
 
-    /* --- WIDGET: INCOME CHART (CSS BARS) --- */
-    .chart-row {
-      display: grid;
-      grid-template-columns: 80px 1fr;
+    .chart-tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 100;
+    }
+
+    /* --- WIDGET 3: CATEGORY BARS --- */
+    .cat-item {
+      margin-bottom: 25px;
+    }
+
+    .cat-label-row {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 15px;
-    }
-
-    .chart-label {
-      font-size: 0.75rem;
+      margin-bottom: 10px;
       font-weight: 600;
-      color: #666;
     }
 
-    .bar-container {
-      height: 18px;
+    .cat-bar-wrap {
+      height: 12px;
+      background: #f0f3f5;
+      border-radius: 6px;
+      overflow: hidden;
       display: flex;
-      gap: 2px;
     }
 
-    .bar-segment {
+    .cat-bar-fill {
       height: 100%;
-      border-radius: 3px;
+      transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* --- WIDGET: TOP PERFORMERS --- */
-    .performer {
+    /* --- WIDGET 4: LEADERBOARD --- */
+    .leader-item {
       display: flex;
       align-items: center;
       gap: 15px;
-      padding: 10px 0;
-      border-bottom: 1px solid #f0f0f0;
+      padding: 15px 0;
+      border-bottom: 1px solid #f8f9fa;
     }
 
-    .performer:last-child {
+    .leader-item:last-child {
       border-bottom: none;
+    }
+
+    .rank {
+      width: 30px;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.1rem;
     }
 
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
+      background: #eee;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 700;
-      font-size: 0.8rem;
+      font-weight: 600;
     }
 
-    .performer-info {
+    .leader-info {
       flex: 1;
     }
 
-    .performer-name {
+    .leader-name {
       font-weight: 600;
-      font-size: 0.9rem;
+      margin-bottom: 4px;
     }
 
-    .performer-score {
-      background: #f0f3f5;
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 0.75rem;
+    .leader-score {
       font-weight: 700;
-      color: var(--primary);
+      color: #333;
     }
 
-    /* --- WIDGET: STATISTICS (SVG) --- */
-    .stat-big {
-      font-size: 3.5rem;
-      font-weight: 800;
-      color: var(--mint-dark);
-      text-align: center;
-      line-height: 1;
-    }
-
-    .stat-sub {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 10px;
-    }
-
-    .trend-svg {
+    /* --- WIDGET 5: DATA TABLE --- */
+    .table-wrap {
       width: 100%;
-      height: 60px;
+      overflow-x: auto;
     }
 
-    /* --- WIDGET: DATA TABLE --- */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -281,39 +309,103 @@
 
     th {
       text-align: left;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      color: #aaa;
-      padding-bottom: 10px;
+      padding: 15px;
+      border-bottom: 2px solid var(--border);
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    th:hover {
+      color: var(--primary);
     }
 
     td {
-      padding: 8px 0;
-      font-size: 0.85rem;
-      border-bottom: 1px solid #f8f9fa;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
     }
 
     .status-badge {
-      padding: 3px 8px;
-      border-radius: 20px;
-      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-    }
-
-    .status-badge.pending {
-      background: #fff3cd;
-      color: #856404;
-    }
-
-    .status-badge.complete {
-      background: #d4edda;
-      color: #155724;
+      letter-spacing: 0.5px;
     }
 
     .status-badge.active {
-      background: #cce5ff;
-      color: #004085;
+      background: #e0f3ff;
+      color: #0366d6;
+    }
+
+    .status-badge.complete {
+      background: #e0fbf0;
+      color: var(--success);
+    }
+
+    .status-badge.pending {
+      background: #fff8e6;
+      color: #f39c12;
+    }
+
+    .action-btn {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* --- WIDGET 6: KPI SUMMARY --- */
+    .summary-val {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #333;
+      margin: 15px 0;
+    }
+
+    .sparkline {
+      width: 100%;
+      height: 80px;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1200px) {
+      .card-revenue {
+        grid-column: span 12;
+      }
+
+      .card-summary {
+        grid-column: span 12;
+      }
+
+      .card-categories {
+        grid-column: span 12;
+      }
+
+      .card-leaderboard {
+        grid-column: span 12;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #dashboard-grid {
+        padding: 20px;
+        gap: 20px;
+      }
     }
   </style>
 </head>
@@ -321,243 +413,398 @@
 <body>
 
   <header>
-    <div class="header-title">UBER ANALYTICS EXECUTIVE</div>
-    <div class="header-actions">
-      <span class="user-chip">Divya Dhole (Admin)</span>
-      <div style="font-size: 0.75rem; cursor: pointer;">SETTINGS</div>
-    </div>
+    <div class="header-brand">Uber Analytics Showcase</div>
+    <div style="font-weight: 500; color: #888;">Live Performance Monitor • Jan 2024</div>
   </header>
 
-  <div id="dashboard-canvas">
-    <!-- Card 1: Sales Overview -->
-    <div class="card" style="grid-row: span 1;">
+  <div id="dashboard-grid">
+    <!-- 1. Key Metrics Overview -->
+    <div class="card card-metrics" id="card-metrics" data-pos="1">
       <div class="card-header">
-        <span class="card-title">Sales Overview</span>
-        <span style="color: #ccc;">...</span>
+        <span class="card-title">Real-time Performance Metrics</span>
+        <span>⋮</span>
       </div>
-      <div>
-        <div class="metric-row">
-          <span class="metric-label">Orders</span>
-          <span class="trend down">▼ 60%</span>
+      <div class="metrics-grid">
+        <div class="metric-item">
+          <p class="metric-label">Total Volume</p>
+          <div class="metric-val-row">
+            <span class="metric-val">148,662</span>
+            <span class="metric-trend trend-up">↑ 12%</span>
+          </div>
         </div>
-        <div class="metric-val">366</div>
-        <div class="progress-bar-wrap">
-          <div class="progress-fill" style="width: 40%; background: var(--danger);"></div>
+        <div class="metric-item">
+          <p class="metric-label">Active Users</p>
+          <div class="metric-val-row">
+            <span class="metric-val">42.5K</span>
+            <span class="metric-trend trend-up">↑ 8%</span>
+          </div>
         </div>
-      </div>
-      <div>
-        <div class="metric-row">
-          <span class="metric-label">Revenue</span>
-          <span class="trend up">▲ 30%</span>
+        <div class="metric-item">
+          <p class="metric-label">Conversion Rate</p>
+          <div class="metric-val-row">
+            <span class="metric-val">62.1%</span>
+            <span class="metric-trend trend-down">↓ 3%</span>
+          </div>
         </div>
-        <div class="metric-val">$2,797</div>
-        <div class="progress-bar-wrap">
-          <div class="progress-fill" style="width: 75%; background: var(--success);"></div>
+        <div class="metric-item">
+          <p class="metric-label">Gross Revenue</p>
+          <div class="metric-val-row">
+            <span class="metric-val">₹24.8M</span>
+            <span class="metric-trend trend-up">↑ 15%</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Card 2: Income Chart (CSS Bars) -->
-    <div class="card" style="grid-row: span 1.5;">
+    <!-- 2. Revenue Trend Chart -->
+    <div class="card card-revenue" id="card-revenue" data-pos="2">
       <div class="card-header">
-        <span class="card-title">Income Categories</span>
+        <span class="card-title">Net Revenue Analysis (Last 12 Months)</span>
       </div>
-      <div class="chart-row">
-        <span class="chart-label">Premier</span>
-        <div class="bar-container">
-          <div class="bar-segment" style="width: 80%; background: var(--primary);"></div>
+      <div class="chart-container" id="revenue-chart-container">
+        <div class="chart-tooltip" id="chart-tooltip"></div>
+        <svg class="svg-chart" id="revenue-svg"></svg>
+      </div>
+    </div>
+
+    <!-- 6. Statistical Summary -->
+    <div class="card card-summary" id="card-summary" data-pos="3">
+      <div class="card-header">
+        <span class="card-title">Executive Sales Impact</span>
+      </div>
+      <p style="color: #888; margin-top: 10px;">Primary Performance Indicator</p>
+      <div class="summary-val">$245,670</div>
+      <p style="color: var(--success); font-weight: 600;">+ $12,400 since last month</p>
+      <div style="flex: 1; display: flex; align-items: flex-end; padding-top: 20px;">
+        <svg class="sparkline" viewBox="0 0 400 100">
+          <path d="M0 80 Q 50 20, 100 80 T 200 60 T 300 90 T 400 50" fill="none" stroke="var(--primary)"
+            stroke-width="4" stroke-linecap="round" />
+          <path d="M0 80 Q 50 20, 100 80 T 200 60 T 300 90 T 400 50 L 400 100 L 0 100 Z" fill="var(--primary)"
+            opacity="0.1" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- 3. Category Breakdown -->
+    <div class="card card-categories" id="card-categories" data-pos="4">
+      <div class="card-header">
+        <span class="card-title">Revenue by Vehicle Class</span>
+      </div>
+      <div class="cat-item">
+        <div class="cat-label-row"><span>Premier Sedan</span><span>₹9.8M (39%)</span></div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-fill" style="width: 39%; background: var(--primary);"></div>
         </div>
       </div>
-      <div class="chart-row">
-        <span class="chart-label">Sedan</span>
-        <div class="bar-container">
-          <div class="bar-segment" style="width: 65%; background: var(--success);"></div>
+      <div class="cat-item">
+        <div class="cat-label-row"><span>Standard UberGo</span><span>₹7.5M (30%)</span></div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-fill" style="width: 30%; background: var(--success);"></div>
         </div>
       </div>
-      <div class="chart-row">
-        <span class="chart-label">Auto</span>
-        <div class="bar-container">
-          <div class="bar-segment" style="width: 90%; background: var(--warning);"></div>
+      <div class="cat-item">
+        <div class="cat-label-row"><span>Uber Auto</span><span>₹4.2M (17%)</span></div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-fill" style="width: 17%; background: var(--warning);"></div>
         </div>
       </div>
-      <div class="chart-row">
-        <span class="chart-label">Moto</span>
-        <div class="bar-container">
-          <div class="bar-segment" style="width: 45%; background: var(--orange);"></div>
-        </div>
-      </div>
-      <div class="chart-row">
-        <span class="chart-label">Pool</span>
-        <div class="bar-container">
-          <div class="bar-segment" style="width: 30%; background: var(--purple);"></div>
+      <div class="cat-item">
+        <div class="cat-label-row"><span>Uber Moto</span><span>₹3.3M (14%)</span></div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-fill" style="width: 14%; background: var(--danger);"></div>
         </div>
       </div>
     </div>
 
-    <!-- Card 3: Top Performers -->
-    <div class="card" style="grid-row: span 1.5;">
+    <!-- 4. Performance Leaderboard -->
+    <div class="card card-leaderboard" id="card-leaderboard" data-pos="5">
       <div class="card-header">
-        <span class="card-title">Top Performance</span>
+        <span class="card-title">Top Regional Commanders</span>
       </div>
-      <div class="performer">
-        <div class="avatar" style="background: var(--primary);">RG</div>
-        <div class="performer-info">
-          <div class="performer-name">Rick Goltier</div>
-          <div style="font-size: 0.7rem; color: #aaa;">Senior Partner</div>
+      <div class="leader-item">
+        <div class="rank">#1</div>
+        <div class="avatar" style="background: var(--primary-light); color: var(--primary);">RG</div>
+        <div class="leader-info">
+          <p class="leader-name">Rick Goltier</p>
+          <p style="font-size: 0.75rem; color: #aaa;">Sector 44 Lead</p>
         </div>
-        <div class="performer-score">750</div>
+        <div class="leader-score">15,442 pts</div>
       </div>
-      <div class="performer">
-        <div class="avatar" style="background: var(--success);">DH</div>
-        <div class="performer-info">
-          <div class="performer-name">Diana Hilman</div>
-          <div style="font-size: 0.7rem; color: #aaa;">Project Lead</div>
+      <div class="leader-item">
+        <div class="rank">#2</div>
+        <div class="avatar" style="background: #e0fbf0; color: var(--success);">DH</div>
+        <div class="leader-info">
+          <p class="leader-name">Diana Hilman</p>
+          <p style="font-size: 0.75rem; color: #aaa;">NCR Central</p>
         </div>
-        <div class="performer-score">542</div>
+        <div class="leader-score">12,870 pts</div>
       </div>
-      <div class="performer">
-        <div class="avatar" style="background: var(--purple);">SM</div>
-        <div class="performer-info">
-          <div class="performer-name">Sam Melendez</div>
-          <div style="font-size: 0.7rem; color: #aaa;">Data Analyst</div>
+      <div class="leader-item">
+        <div class="rank">#3</div>
+        <div class="avatar" style="background: #fff8e6; color: var(--warning);">SM</div>
+        <div class="leader-info">
+          <p class="leader-name">Sam Melendez</p>
+          <p style="font-size: 0.75rem; color: #aaa;">Gurgaon Ops</p>
         </div>
-        <div class="performer-score">874</div>
+        <div class="leader-score">11,200 pts</div>
+      </div>
+      <div class="leader-item">
+        <div class="rank">#4</div>
+        <div class="avatar" style="background: #f8f9fa;">AK</div>
+        <div class="leader-info">
+          <p class="leader-name">Arjun Kapoor</p>
+          <p style="font-size: 0.75rem; color: #aaa;">Noida East</p>
+        </div>
+        <div class="leader-score">9,410 pts</div>
       </div>
     </div>
 
-    <!-- Card 4: Statistics (SVG) -->
-    <div class="card">
+    <!-- 5. Data Table -->
+    <div class="card card-table" id="card-table" data-pos="6">
       <div class="card-header">
-        <span class="card-title">Success Rate</span>
+        <span class="card-title">Regional Trip Analytics</span>
+        <div class="header-right">
+          <button class="action-btn">Export CSV</button>
+        </div>
       </div>
-      <div class="stat-big">76%</div>
-      <div class="stat-sub">Revenue Growth this Quarter</div>
-      <svg class="trend-svg" viewBox="0 0 400 60">
-        <path d="M0 50 Q 50 10, 100 50 T 200 20 T 300 40 T 400 10" fill="none" stroke="var(--mint)" stroke-width="4"
-          stroke-linecap="round" />
-        <path d="M0 50 Q 50 10, 100 50 T 200 20 T 300 40 T 400 10 L 400 60 L 0 60 Z" fill="var(--mint)" opacity="0.1" />
-      </svg>
-    </div>
-
-    <!-- Card 5: Data Table -->
-    <div class="card" style="grid-column: span 1.5;">
-      <div class="card-header">
-        <span class="card-title">Transaction Status</span>
+      <div class="table-wrap">
+        <table id="analytics-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Trip ID</th>
+              <th onclick="sortTable(1)">Vehicle</th>
+              <th onclick="sortTable(2)">Revenue</th>
+              <th onclick="sortTable(3)">Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Status</th>
-            <th>Name</th>
-            <th>Progress</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>#4421</td>
-            <td><span class="status-badge complete">Complete</span></td>
-            <td>Premier Booking</td>
-            <td>
-              <div class="progress-bar-wrap" style="width: 60px; margin: 0;">
-                <div class="progress-fill" style="width: 100%; background: var(--success);"></div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>#4422</td>
-            <td><span class="status-badge pending">Pending</span></td>
-            <td>Sedan Trip</td>
-            <td>
-              <div class="progress-bar-wrap" style="width: 60px; margin: 0;">
-                <div class="progress-fill" style="width: 45%; background: var(--warning);"></div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>#4423</td>
-            <td><span class="status-badge active">Active</span></td>
-            <td>Moto Express</td>
-            <td>
-              <div class="progress-bar-wrap" style="width: 60px; margin: 0;">
-                <div class="progress-fill" style="width: 10%; background: var(--primary);"></div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 
-  <!-- --- DRAG LOGIC --- -->
+  <!-- Scripts -->
   <script>
-    const canvas = document.getElementById('dashboard-canvas');
-    const cards = document.querySelectorAll('.card');
+    // --- MOCK DATA ---
+    const tableData = [
+      { id: "#UB-7721", vehicle: "Premier Sedan", revenue: "₹842", status: "complete" },
+      { id: "#UB-7722", vehicle: "Uber Go", revenue: "₹450", status: "complete" },
+      { id: "#UB-7723", vehicle: "Uber Auto", revenue: "₹210", status: "pending" },
+      { id: "#UB-7724", vehicle: "Premier Sedan", revenue: "₹1,200", status: "active" },
+      { id: "#UB-7725", vehicle: "Uber Moto", revenue: "₹120", status: "complete" },
+      { id: "#UB-7726", vehicle: "Uber Pool", revenue: "₹330", status: "complete" },
+      { id: "#UB-7727", vehicle: "Uber Go", revenue: "₹480", status: "pending" },
+      { id: "#UB-7728", vehicle: "Premier Sedan", revenue: "₹990", status: "active" }
+    ];
 
+    const revenueData = [210, 350, 280, 480, 520, 410, 680, 720, 630, 840, 910, 870];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    // --- TABLE GENERATION & SORTING ---
+    function renderTable(data) {
+      const body = document.getElementById('table-body');
+      body.innerHTML = data.map(row => `
+            <tr>
+                <td style="font-weight: 600;">${row.id}</td>
+                <td>${row.vehicle}</td>
+                <td style="font-weight: 700;">${row.revenue}</td>
+                <td><span class="status-badge ${row.status}">${row.status}</span></td>
+                <td><button class="action-btn" onclick="alert('Viewing Details for ${row.id}')">View</button></td>
+            </tr>
+        `).join('');
+    }
+
+    let sortDir = 1;
+    function sortTable(idx) {
+      const keys = ['id', 'vehicle', 'revenue', 'status'];
+      const sorted = [...tableData].sort((a, b) => {
+        const valA = a[keys[idx]].replace(/[₹,#]/g, '');
+        const valB = b[keys[idx]].replace(/[₹,#]/g, '');
+        return (isNaN(valA) ? valA.localeCompare(valB) : valA - valB) * sortDir;
+      });
+      sortDir *= -1;
+      renderTable(sorted);
+    }
+
+    // --- SVG REVENUE CHART ---
+    function renderRevenueChart() {
+      const svg = document.getElementById('revenue-svg');
+      const container = document.getElementById('revenue-chart-container');
+      const tooltip = document.getElementById('chart-tooltip');
+
+      const width = container.offsetWidth;
+      const height = container.offsetHeight - 40;
+      const padding = 40;
+
+      const maxVal = Math.max(...revenueData) * 1.2;
+      const xStep = (width - padding * 2) / (revenueData.length - 1);
+
+      // Generate Area Path
+      let pathD = `M ${padding} ${height}`;
+      let lineD = `M ${padding} ${height - (revenueData[0] / maxVal) * (height - padding)}`;
+
+      const points = revenueData.map((val, i) => ({
+        x: padding + i * xStep,
+        y: height - (val / maxVal) * (height - padding)
+      }));
+
+      points.forEach((p, i) => {
+        if (i === 0) return;
+        lineD += ` L ${p.x} ${p.y}`;
+      });
+
+      pathD = lineD + ` L ${points[points.length - 1].x} ${height} Z`;
+
+      svg.innerHTML = `
+            <defs>
+                <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--primary);stop-opacity:0.2" />
+                    <stop offset="100%" style="stop-color:var(--primary);stop-opacity:0" />
+                </linearGradient>
+            </defs>
+            <path d="${pathD}" fill="url(#areaGrad)" />
+            <path d="${lineD}" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" />
+            ${points.map((p, i) => `
+                <circle cx="${p.x}" cy="${p.y}" r="4" fill="#fff" stroke="var(--primary)" stroke-width="2" 
+                    onmouseenter="showTooltip(evt, '${months[i]}', '₹${revenueData[i]}K')" 
+                    onmouseleave="hideTooltip()" 
+                    style="cursor:pointer" />
+            `).join('')}
+            ${months.map((m, i) => `
+                <text x="${padding + i * xStep}" y="${height + 25}" text-anchor="middle" fill="#aaa" style="font-size:10px">${m}</text>
+            `).join('')}
+        `;
+    }
+
+    window.showTooltip = (evt, label, value) => {
+      const tooltip = document.getElementById('chart-tooltip');
+      tooltip.innerHTML = `<strong>${label}</strong>: ${value}`;
+      tooltip.style.opacity = '1';
+      tooltip.style.left = (evt.clientX - 50) + 'px';
+      tooltip.style.top = (evt.clientY - 60) + 'px';
+    };
+
+    window.hideTooltip = () => {
+      document.getElementById('chart-tooltip').style.opacity = '0';
+    };
+
+    // --- DRAG & DROP ENGINE ---
+    const grid = document.getElementById('dashboard-grid');
+    let cards = document.querySelectorAll('.card');
     let isDragging = false;
     let activeCard = null;
     let startX, startY;
-    let cardStartX, cardStartY;
+    let cardOffX, cardOffY;
 
-    cards.forEach(card => {
-      card.addEventListener('mousedown', (e) => {
-        // Only allow drag if not clicking on a sub-element that might need clicks
-        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
-
-        isDragging = true;
-        activeCard = card;
-
-        // Get the current position
-        const rect = card.getBoundingClientRect();
-
-        // Switch to absolute positioning for the drag
-        // We calculate the current offset relative to the canvas
-        const canvasRect = canvas.getBoundingClientRect();
-
-        startX = e.clientX;
-        startY = e.clientY;
-
-        cardStartX = rect.left - canvasRect.left;
-        cardStartY = rect.top - canvasRect.top;
-
-        // Lock the card's width/height before switching to absolute
-        card.style.width = rect.width + 'px';
-        card.style.height = rect.height + 'px';
-
-        card.classList.add('dragging');
-        card.style.position = 'absolute';
-        card.style.left = cardStartX + 'px';
-        card.style.top = cardStartY + 'px';
-
-        // Prevent grid from collapsing by adding a placeholder if we were fancy
-        // But for a "lightweight" fix, we'll just allow free movement
+    function initDrag() {
+      cards.forEach(card => {
+        card.addEventListener('mousedown', startDrag);
       });
-    });
+    }
+
+    function startDrag(e) {
+      if (e.target.tagName === 'BUTTON') return;
+      isDragging = true;
+      activeCard = this;
+
+      const rect = activeCard.getBoundingClientRect();
+      cardOffX = e.clientX - rect.left;
+      cardOffY = e.clientY - rect.top;
+
+      activeCard.classList.add('dragging');
+      activeCard.style.position = 'fixed';
+      activeCard.style.width = rect.width + 'px';
+      activeCard.style.height = rect.height + 'px';
+
+      moveAt(e.clientX, e.clientY);
+    }
+
+    function moveAt(x, y) {
+      if (!activeCard) return;
+      activeCard.style.left = (x - cardOffX) + 'px';
+      activeCard.style.top = (y - cardOffY) + 'px';
+    }
 
     document.addEventListener('mousemove', (e) => {
-      if (!isDragging || !activeCard) return;
-
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-
-      activeCard.style.left = (cardStartX + dx) + 'px';
-      activeCard.style.top = (cardStartY + dy) + 'px';
+      if (!isDragging) return;
+      moveAt(e.clientX, e.clientY);
     });
 
-    document.addEventListener('mouseup', () => {
-      if (isDragging && activeCard) {
-        activeCard.classList.remove('dragging');
-        // Ensure it stays where dropped by keeping position: absolute
-      }
+    document.addEventListener('mouseup', (e) => {
+      if (!isDragging) return;
       isDragging = false;
+
+      // Find best sibling to swap with
+      const siblings = [...grid.children].filter(child => child !== activeCard);
+      let bestTarget = null;
+      let minDistance = Infinity;
+
+      siblings.forEach(sibling => {
+        const rect = sibling.getBoundingClientRect();
+        const dist = Math.hypot(e.clientX - (rect.left + rect.width / 2), e.clientY - (rect.top + rect.height / 2));
+        if (dist < minDistance && dist < 300) {
+          minDistance = dist;
+          bestTarget = sibling;
+        }
+      });
+
+      if (bestTarget) {
+        const activePos = activeCard.dataset.pos;
+        const targetPos = bestTarget.dataset.pos;
+
+        // Re-append for visual ordering
+        const children = [...grid.children];
+        const activeIdx = children.indexOf(activeCard);
+        const targetIdx = children.indexOf(bestTarget);
+
+        if (activeIdx < targetIdx) {
+          grid.insertBefore(activeCard, bestTarget.nextSibling);
+        } else {
+          grid.insertBefore(activeCard, bestTarget);
+        }
+
+        saveLayout();
+      }
+
+      activeCard.classList.remove('dragging');
+      activeCard.style.position = '';
+      activeCard.style.width = '';
+      activeCard.style.height = '';
+      activeCard.style.left = '';
+      activeCard.style.top = '';
       activeCard = null;
     });
 
-    // Basic responsive check
-    window.addEventListener('resize', () => {
-      // Optional: reset positions on resize if they go off screen
+    // --- PERSISTENCE ---
+    function saveLayout() {
+      const order = [...grid.children].map(c => c.id);
+      localStorage.setItem('uber-dash-layout', JSON.stringify(order));
+    }
+
+    function loadLayout() {
+      const order = JSON.parse(localStorage.getItem('uber-dash-layout'));
+      if (order) {
+        order.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) grid.appendChild(el);
+        });
+      }
+    }
+
+    // --- INITIALIZE ---
+    window.addEventListener('load', () => {
+      loadLayout();
+      renderTable(tableData);
+      renderRevenueChart();
+      initDrag();
     });
+
+    window.addEventListener('resize', renderRevenueChart);
   </script>
+
 </body>
 
 </html>
