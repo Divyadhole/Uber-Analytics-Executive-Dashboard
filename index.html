@@ -357,8 +357,13 @@
             <div class="sidebar-header">Architect</div>
             <div class="sidebar-menu">
                 <div class="menu-header">Menu</div>
-                <div class="menu-item active">Dashboards</div>
-                <div class="menu-item" style="padding-left: 45px; font-size: 0.85rem; color: var(--primary);">Minimal
+                <div class="menu-item active" onclick="launchDashboard()" style="cursor: pointer; position: relative;">
+                    Dashboards
+                    <span
+                        style="position: absolute; right: 15px; font-size: 10px; background: var(--success); color: #fff; padding: 2px 6px; border-radius: 10px;">LIVE</span>
+                </div>
+                <div class="menu-item" onclick="launchDashboard()"
+                    style="padding-left: 45px; font-size: 0.85rem; color: var(--primary); cursor: pointer;">Minimal
                 </div>
                 <div class="menu-header">Pages</div>
                 <div class="menu-item">Applications</div>
@@ -431,9 +436,10 @@
                 <div class="row">
                     <div class="card action-card">
                         <h2>Uber Executive Analysis (2024)</h2>
-                        <p style="font-size: 1.1rem; color: #666;">Experience the full interactive environment with
-                            148,000+ ride data points processed in real-time.</p>
-                        <button class="launch-btn" onclick="launchDashboard()">Enter Live Analytics Dashboard</button>
+                        <p style="font-size: 1.1rem; color: #666;">This project provides a 360-degree view of Uber's
+                            performance metrics, cancellation analytics, and geospatial trends in the NCR region.</p>
+                        <p style="font-size: 0.9rem; color: var(--primary); font-weight: 500;">Tip: Click "Dashboards"
+                            or "Minimal" in the left sidebar to enter the interactive view.</p>
                     </div>
                 </div>
             </div>
