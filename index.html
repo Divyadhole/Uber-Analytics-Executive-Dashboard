@@ -4,292 +4,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uber Executive Dashboard | Portfolio Showcase</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Architect Dashboard | Project Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0366d6;
-            --bg-dark: #050505;
-            --accent: #27ae60;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --sidebar-width: 260px;
+            --topbar-height: 60px;
+            --bg-body: #f1f4f6;
+            --sidebar-bg: #fff;
+            --primary: #3f6ad8;
+            --text-main: #495057;
+            --border-color: #e9ecef;
+            --success: #3ac47d;
+            --danger: #d92550;
+            --warning: #f7b924;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
         }
 
         body {
-            background: var(--bg-dark);
-            color: #fff;
-            overflow-x: hidden;
-            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
-            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        /* --- LAYOUT --- */
+        .wrapper {
             display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Animated background particles effect */
-        .bg-glow {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(3, 102, 214, 0.1) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            filter: blur(80px);
-            animation: pulse 10s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.5;
-            }
-
-            100% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.8;
-            }
-        }
-
-        .dashboard-interface {
-            width: 90%;
-            max-width: 1200px;
-            padding: 40px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 50px;
-        }
-
-        .title-section h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(90deg, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .badge {
-            background: rgba(3, 102, 214, 0.2);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            border: 1px solid var(--primary);
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
-        .kpi-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            position: relative;
+            height: 100vh;
             overflow: hidden;
         }
 
-        .kpi-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
-            border-color: var(--primary);
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
         }
 
-        .kpi-card h3 {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #888;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .kpi-card .value {
-            font-size: 2.2rem;
+        .sidebar-header {
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 1.5rem;
             font-weight: 700;
+            color: #333;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .menu-header {
+            padding: 10px 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #888;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .menu-item.active {
+            background: #e0f3ff;
+            color: var(--primary);
+            font-weight: 600;
+            border-right: 3px solid var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Top Bar */
+        .header {
+            height: var(--topbar-height);
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-mock {
+            background: #f0f3f5;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: #aaa;
+            width: 200px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-mock {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 4px;
+            background: #ddd;
+        }
+
+        /* Dashboard Page Content */
+        .page-content {
+            padding: 30px;
+        }
+
+        .page-title-box {
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #444;
+        }
+
+        /* --- CARDS & WIDGETS --- */
+        .row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 1200px) {
+            .row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03), 0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05), 0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .widget-content-left h4 {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
             margin-bottom: 5px;
         }
 
-        .kpi-card .delta {
+        .widget-numbers {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .widget-numbers span {
             font-size: 0.9rem;
-            color: var(--accent);
+            margin-left: 5px;
+            font-weight: 400;
+        }
+
+        /* Circular progress mock-up */
+        .gauge-wrap {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+
+        .gauge-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid #f0f0f0;
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .gauge-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: var(--primary);
+            transform: rotate(45deg);
+        }
+
+        /* Large Action Card */
+        .action-card {
+            grid-column: span 3;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 40px;
+        }
+
+        .action-card h2 {
+            font-size: 1.8rem;
+            font-weight: 300;
         }
 
         .launch-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            background: #fff;
-            color: #000;
-            padding: 20px 45px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            width: fit-content;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-top: 20px;
+            transition: opacity 0.2s;
         }
 
         .launch-btn:hover {
-            transform: scale(1.05) translateX(10px);
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(3, 102, 214, 0.4);
+            opacity: 0.9;
         }
 
-        .launch-btn span {
-            font-size: 1.5rem;
-        }
-
-        .footer-note {
-            margin-top: 40px;
-            color: #555;
-            font-size: 0.9rem;
+        .sidebar-ad {
+            margin: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px dashed #ccc;
             text-align: center;
-        }
-
-        /* Micro-interactions */
-        .glass-orb {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background: var(--primary);
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.2;
-            top: -50px;
-            right: -50px;
-            pointer-events: none;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-interface {
-                padding: 30px;
-            }
-
-            .title-section h1 {
-                font-size: 2rem;
-            }
-
-            .kpi-grid {
-                grid-template-columns: 1fr;
-            }
+            font-size: 0.8rem;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="bg-glow"></div>
+    <div class="wrapper">
+        <!-- --- SIDEBAR --- -->
+        <aside class="sidebar">
+            <div class="sidebar-header">Architect</div>
+            <div class="sidebar-menu">
+                <div class="menu-header">Menu</div>
+                <div class="menu-item active">Dashboards</div>
+                <div class="menu-item" style="padding-left: 45px; font-size: 0.85rem; color: var(--primary);">Minimal
+                </div>
 
-    <div class="dashboard-interface">
-        <div class="header">
-            <div class="title-section">
-                <span class="badge">Business Intelligence 2024</span>
-                <h1>Uber Executive Analysis<br>Performance Analytics</h1>
+                <div class="menu-header">Pages</div>
+                <div class="menu-item">Applications</div>
+                <div class="menu-item">Websites</div>
+
+                <div class="menu-header">UI Components</div>
+                <div class="menu-item">Elements</div>
+                <div class="menu-item">Widgets</div>
+
+                <div class="menu-header">Data Visuals</div>
+                <div class="menu-item">Charts</div>
+                <div class="menu-item">Tables</div>
             </div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" width="80"
-                style="filter: invert(1);">
-        </div>
-
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="glass-orb"></div>
-                <h3>Total Bookings</h3>
-                <div class="value">148,662</div>
-                <div class="delta"><span>↑</span> 12.4% vs Prev period</div>
+            <div class="sidebar-ad">
+                Portfolio Project<br><strong>Uber Analytics</strong>
             </div>
-            <div class="kpi-card">
-                <h3>Completion Rate</h3>
-                <div class="value">62.1%</div>
-                <div class="delta" style="color: #f39c12;"><span>⚡</span> Optimal Performance</div>
+        </aside>
+
+        <!-- --- MAIN --- -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="search-mock">Search dashboard...</div>
+                </div>
+                <div class="header-right">
+                    <div class="user-mock">
+                        <span>Alina Mclourd</span>
+                        <div class="avatar"></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <div class="page-title-box">
+                    <h2 class="page-title">Minimal Dashboard</h2>
+                    <span style="color: #aaa; font-size: 0.85rem;">Dashboards / Minimal Dashboard Example</span>
+                </div>
+
+                <!-- KPI Row -->
+                <div class="row">
+                    <div class="card">
+                        <div class="widget-content-left">
+                            <h4>New Accounts</h4>
+                            <div class="widget-numbers" style="color: var(--success);">234 <span>%</span></div>
+                        </div>
+                        <div class="gauge-wrap">
+                            <div class="gauge-circle">58</div>
+                            <div class="gauge-fill" style="border-top-color: var(--success);"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="widget-content-left">
+                            <h4>Total Expenses</h4>
+                            <div class="widget-numbers" style="color: var(--danger);">71 <span>%</span></div>
+                        </div>
+                        <div class="gauge-wrap">
+                            <div class="gauge-circle">62</div>
+                            <div class="gauge-fill" style="border-top-color: var(--danger);"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="widget-content-left">
+                            <h4>Company Value</h4>
+                            <div class="widget-numbers">$ 1,45M</div>
+                        </div>
+                        <div class="gauge-wrap">
+                            <div class="gauge-circle">72</div>
+                            <div class="gauge-fill" style="border-top-color: var(--primary);"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="widget-content-left">
+                            <h4>New Employees</h4>
+                            <div class="widget-numbers" style="color: var(--success);">34 <span>hires</span></div>
+                        </div>
+                        <div class="gauge-wrap">
+                            <div class="gauge-circle">81</div>
+                            <div class="gauge-fill" style="border-top-color: var(--success);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Case Study Display -->
+                <div class="row" style="grid-template-columns: 1fr;">
+                    <div class="card action-card">
+                        <h2>Uber Executive Analysis Case Study (2024)</h2>
+                        <p style="font-size: 1.1rem; line-height: 1.6; color: #666; max-width: 800px;">
+                            An end-to-end data science project analyzing 148,000+ ride bookings in the NCR region.
+                            This dashboard provides actionable insights into ride completion rates, revenue drivers, and
+                            cancellation patterns.
+                        </p>
+                        <div style="display: flex; gap: 20px; font-weight: 500; color: #555;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span
+                                    style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #3f6ad8;"></span>
+                                Python 3.12
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span
+                                    style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #3ac47d;"></span>
+                                Interactive Stlite
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span
+                                    style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #f7b924;"></span>
+                                Business Intel
+                            </div>
+                        </div>
+                        <a href="dashboard_web.html" class="launch-btn">Enter Live Interactive Dashboard</a>
+                    </div>
+                </div>
+
+                <!-- Fake Chart Area to mimic the image -->
+                <div class="row" style="grid-template-columns: 2fr 1fr;">
+                    <div class="card" style="display: block;">
+                        <h4 style="color: #666; margin-bottom: 20px;">Traffic Sources</h4>
+                        <div
+                            style="width: 100%; height: 200px; background: #fafafa; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                            [ Sample Volume Visualization ]
+                        </div>
+                    </div>
+                    <div class="card" style="display: block; text-align: center;">
+                        <h4 style="color: #666; margin-bottom: 10px;">Income Target</h4>
+                        <div
+                            style="width: 120px; height: 120px; margin: 0 auto; border: 8px solid #f0f0f0; border-top-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700;">
+                            75%
+                        </div>
+                        <p style="margin-top: 15px; color: #888;">Expenditure Status</p>
+                    </div>
+                </div>
             </div>
-            <div class="kpi-card">
-                <h3>Gross Revenue</h3>
-                <div class="value">₹24.8M</div>
-                <div class="delta"><span>↑</span> Higher Margin Products</div>
-            </div>
-        </div>
-
-        <div style="max-width: 600px; margin-bottom: 40px;">
-            <p style="font-size: 1.1rem; line-height: 1.8; color: #bbb;">
-                An advanced end-to-end data analytics project uncovering strategic insights within 148k+ ride bookings
-                in the NCR region.
-                Analyzed profitability drivers, root causes for churn, and geospatial demand clusters.
-            </p>
-        </div>
-
-        <a href="dashboard_web.html" class="launch-btn">
-            Enter Interactive Environment <span>→</span>
-        </a>
-
-        <div class="footer-note">
-            Engineered by Divya Dhole • Optimized for Instant Web Delivery
-        </div>
+        </main>
     </div>
-
-    <script>
-        // Subtle tilt effect for cards
-        const cards = document.querySelectorAll('.kpi-card');
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) translateY(0)`;
-            });
-        });
-    </script>
 
 </body>
 
