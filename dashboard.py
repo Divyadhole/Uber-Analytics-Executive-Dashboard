@@ -67,6 +67,7 @@ st.markdown("""
 @st.cache_data
 def load_data():
     df = pd.read_csv('archive/ncr_ride_bookings.csv')
+    df.columns = df.columns.str.strip() # Remove any hidden whitespaces in headers
     df = df.apply(lambda x: x.str.replace('"', '', regex=False) if x.dtype == "object" else x)
     df.replace('null', np.nan, inplace=True)
     
@@ -87,6 +88,8 @@ def load_data():
     return df
 
 df = load_data()
+if not df.empty:
+    st.toast("✅ Dataset initialized successfully!", icon="🌐")
 
 # --- SIDEBAR ---
 with st.sidebar:
