@@ -1,10 +1,12 @@
 # 🚖 Uber Analytics Executive Dashboard (2024)
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.25%2B-FF4B4B.svg)](https://streamlit.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Live Dashboard](https://img.shields.io/badge/Live-Dashboard-success?style=for-the-badge&logo=github)](https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.25%2B-FF4B4B?style=flat-square)](https://streamlit.io/)
 
-An end-to-end Data Analytics & Executive Dashboard project analyzing **148,000+ Uber ride bookings** in the NCR region for the year 2024. This project provides actionable insights into ride completion rates, revenue drivers, and cancellation patterns through advanced visualizations and interactive mapping.
+An end-to-end Data Analytics & Executive Dashboard project analyzing **148,000+ Uber ride bookings** in the NCR region for the year 2024.
+
+### 🌐 View Live: [https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard](https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard)
 
 ![Dashboard Preview](dashboard_preview.png)
 
