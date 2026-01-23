@@ -29,6 +29,7 @@ An end-to-end Data Analytics & Executive Dashboard project analyzing **148,000+ 
 
 ## 📦 Installation & Setup
 
+### Local Run
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/Divyadhole/Uber-Analytics-Executive-Dashboard.git
@@ -44,6 +45,15 @@ An end-to-end Data Analytics & Executive Dashboard project analyzing **148,000+ 
    ```bash
    streamlit run dashboard.py
    ```
+
+### 🌐 Live Dashboard (.io)
+The dashboard is [hosted live on GitHub Pages](https://Divyadhole.github.io/Uber-Analytics-Executive-Dashboard). 
+
+**How to enable in your repo:**
+1. Go to **Settings** > **Pages**.
+2. Under **Build and deployment** > **Source**, select **Deploy from a branch**.
+3. Select `main` branch and `/ (root)` folder.
+4. Click **Save**.
 
 ## 📊 Key Insights
 
