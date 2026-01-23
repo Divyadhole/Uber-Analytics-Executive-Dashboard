@@ -5,6 +5,12 @@
 
 An end-to-end Data Analytics & Executive Dashboard project analyzing **148,000+ Uber ride bookings** in the NCR region for the year 2024.
 
+## 🌐 Live Dashboard
+
+**Visit:** [https://divyadhole.github.io/Uber-Analytics-Executive-Dashboard](https://divyadhole.github.io/Uber-Analytics-Executive-Dashboard)
+
+---
+
 ## 🚀 Interactive Dashboard Features
 
 - **Executive KPI Tracking**: Real-time monitoring of Gross Revenue, Completion Rates, and Customer Satisfaction (CSAT).
