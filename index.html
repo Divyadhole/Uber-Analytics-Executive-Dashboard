@@ -4,150 +4,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Analytics Times | Uber Case Study 2024</title>
+    <title>Uber Executive Dashboard | Portfolio Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --paper-bg: #f4f1ea;
-            --ink-black: #2c2c2c;
-            --ink-red: #c0392b;
-            --border-thick: 3px solid #2c2c2c;
-            --border-thin: 1px solid #2c2c2c;
-            --font-main: 'Times New Roman', Times, serif;
+            --primary: #0366d6;
+            --bg-dark: #050505;
+            --accent: #27ae60;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
         }
 
         body {
-            background-color: var(--paper-bg);
-            color: var(--ink-black);
-            font-family: var(--font-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            background: var(--bg-dark);
+            color: #fff;
+            overflow-x: hidden;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 2rem;
-            border: var(--border-thin);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-            background: #fff;
+        /* Animated background particles effect */
+        .bg-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(3, 102, 214, 0.1) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            filter: blur(80px);
+            animation: pulse 10s infinite alternate;
         }
 
-        header {
-            text-align: center;
-            border-bottom: var(--border-thick);
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.8;
+            }
         }
 
-        .brand {
-            font-size: 3.5rem;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            margin: 0;
+        .dashboard-interface {
+            width: 90%;
+            max-width: 1200px;
+            padding: 40px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-out;
         }
 
-        .date-line {
-            border-top: var(--border-thin);
-            border-bottom: var(--border-thin);
-            padding: 0.3rem 0;
-            margin-top: 0.5rem;
-            text-transform: uppercase;
-            font-weight: bold;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+        }
+
+        .title-section h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            background: rgba(3, 102, 214, 0.2);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
             font-size: 0.9rem;
-        }
-
-        .headline {
-            font-size: 2.5rem;
-            text-align: center;
             text-transform: uppercase;
-            margin: 1.5rem 0;
-            line-height: 1.1;
+            border: 1px solid var(--primary);
+            margin-bottom: 15px;
+            display: inline-block;
         }
 
-        .byline {
-            text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-bottom: var(--border-thin);
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .hero-stats {
+        .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
         }
 
-        .stat-card {
-            border: var(--border-thin);
-            padding: 1.5rem;
-            text-align: center;
-            background: var(--paper-bg);
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-value {
-            display: block;
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--ink-red);
+        .kpi-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            border-color: var(--primary);
         }
 
-        .stat-label {
-            text-transform: uppercase;
+        .kpi-card h3 {
             font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
-
-        .article-text {
-            text-align: justify;
-            column-count: 2;
-            column-gap: 2rem;
-            font-size: 1.1rem;
-        }
-
-        .btn-launch {
-            display: block;
-            width: fit-content;
-            margin: 3rem auto;
-            background: var(--ink-black);
-            color: #fff;
-            padding: 1rem 3rem;
-            font-size: 1.2rem;
             text-transform: uppercase;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
+            color: #888;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
         }
 
-        .btn-launch:hover {
-            background: var(--ink-red);
-            transform: scale(1.05);
+        .kpi-card .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .kpi-card .delta {
+            font-size: 0.9rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            color: #000;
+            padding: 20px 45px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 20px;
+        }
+
+        .launch-btn:hover {
+            transform: scale(1.05) translateX(10px);
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(3, 102, 214, 0.4);
+        }
+
+        .launch-btn span {
+            font-size: 1.5rem;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            color: #555;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Micro-interactions */
+        .glass-orb {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.2;
+            top: -50px;
+            right: -50px;
+            pointer-events: none;
         }
 
         @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
+            .dashboard-interface {
+                padding: 30px;
             }
 
-            .article-text {
-                column-count: 1;
-            }
-
-            .brand {
+            .title-section h1 {
                 font-size: 2rem;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -155,58 +223,73 @@
 
 <body>
 
-    <div class="container">
-        <header>
-            <div class="brand">The Analytics Times</div>
-            <div class="date-line">
-                <span>Special Report</span>
-                <span>NCR Region, 2024</span>
-                <span>Advanced Case Study</span>
-            </div>
-        </header>
+    <div class="bg-glow"></div>
 
-        <h1 class="headline">Uber Executive Analysis: Revenue Surge in NCR Amidst Cancellation Challenges</h1>
-
-        <div class="byline">Article & Analysis by Divya Dhole</div>
-
-        <div class="hero-stats">
-            <div class="stat-card">
-                <span class="stat-value">148K+</span>
-                <span class="stat-label">Total Bookings Analyzed</span>
+    <div class="dashboard-interface">
+        <div class="header">
+            <div class="title-section">
+                <span class="badge">Business Intelligence 2024</span>
+                <h1>Uber Executive Analysis<br>Performance Analytics</h1>
             </div>
-            <div class="stat-card">
-                <span class="stat-value">62%</span>
-                <span class="stat-label">Completion Rate</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" width="80"
+                style="filter: invert(1);">
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="glass-orb"></div>
+                <h3>Total Bookings</h3>
+                <div class="value">148,662</div>
+                <div class="delta"><span>↑</span> 12.4% vs Prev period</div>
             </div>
-            <div class="stat-card">
-                <span class="stat-value">₹24.8M</span>
-                <span class="stat-label">Gross Revenue</span>
+            <div class="kpi-card">
+                <h3>Completion Rate</h3>
+                <div class="value">62.1%</div>
+                <div class="delta" style="color: #f39c12;"><span>⚡</span> Optimal Performance</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Gross Revenue</h3>
+                <div class="value">₹24.8M</div>
+                <div class="delta"><span>↑</span> Higher Margin Products</div>
             </div>
         </div>
 
-        <div class="content">
-            <div class="article-text">
-                <p><strong>NEW DELHI</strong> — In an unprecedented look into the ride-sharing dynamics of the National
-                    Capital Region, a new executive report reveals critical success factors for Uber's 2024 operations.
-                    The data shows that while demand remains at an all-time high, driver movement at the point of pickup
-                    remains the primary friction point for customer churn.</p>
-                <p>Strategic analysis of vehicle types suggests that Premier Sedans are the backbone of profitability,
-                    contributing nearly 40% of the total revenue share despite a lower volume compared to budget
-                    options. The study also highlights significant geospatial hotspots, particularly in the AIIMS and
-                    Saket corridors, where ride density peaks during evening rush hours.</p>
-            </div>
-            <div class="sidebar">
-                <div style="border: 2px dashed #2c2c2c; padding: 1rem; text-align: center;">
-                    <h3 style="margin-top: 0;">REPORT NOTES</h3>
-                    <p style="font-size: 0.9rem;">Dataset: NCR Ride Bookings 2024<br>Tools: Python, Streamlit,
-                        Plotly<br>Author: Divya Dhole</p>
-                </div>
-            </div>
+        <div style="max-width: 600px; margin-bottom: 40px;">
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #bbb;">
+                An advanced end-to-end data analytics project uncovering strategic insights within 148k+ ride bookings
+                in the NCR region.
+                Analyzed profitability drivers, root causes for churn, and geospatial demand clusters.
+            </p>
         </div>
 
-        <a href="dashboard_web.html" class="btn-launch">Launch Interactive Dashboard</a>
+        <a href="dashboard_web.html" class="launch-btn">
+            Enter Interactive Environment <span>→</span>
+        </a>
 
+        <div class="footer-note">
+            Engineered by Divya Dhole • Optimized for Instant Web Delivery
+        </div>
     </div>
+
+    <script>
+        // Subtle tilt effect for cards
+        const cards = document.querySelectorAll('.kpi-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) translateY(0)`;
+            });
+        });
+    </script>
 
 </body>
 

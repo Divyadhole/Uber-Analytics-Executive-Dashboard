@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Interactive Dashboard | Uber Case Study</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.58.0/build/stlite.css" />
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #f6f8fa;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #050505;
+            font-family: 'Outfit', sans-serif;
         }
 
         #loading {
@@ -21,23 +22,24 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #ffffff;
+            background: #050505;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            color: #24292e;
+            color: #fff;
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
+            border: 4px solid rgba(255, 255, 255, 0.05);
             border-top: 4px solid #0366d6;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 20px rgba(3, 102, 214, 0.2);
         }
 
         @keyframes spin {
@@ -52,7 +54,14 @@
 
         .status-text {
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+        }
+
+        .sub-text {
+            margin-top: 10px;
+            color: #888;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -60,7 +69,8 @@
 <body>
     <div id="loading">
         <div class="spinner"></div>
-        <div class="status-text">Warming up the Dashboard (using optimized web dataset)...</div>
+        <div class="status-text">Synchronizing Real-time Data...</div>
+        <div class="sub-text">Optimizing analysis environment for high-speed delivery.</div>
     </div>
     <div id="stlite"></div>
     <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.58.0/build/stlite.js"></script>
@@ -90,7 +100,8 @@
                 );
             } catch (error) {
                 console.error(error);
-                document.querySelector(".status-text").innerText = "Loading Issue: " + error.message;
+                document.querySelector(".status-text").innerText = "Execution error detected.";
+                document.querySelector(".sub-text").innerText = error.message;
             }
         }
         main();
