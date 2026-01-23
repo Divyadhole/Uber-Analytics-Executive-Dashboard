@@ -89,7 +89,10 @@ def load_data():
 
 df = load_data()
 if not df.empty:
-    st.toast("✅ Dataset initialized successfully!", icon="🌐")
+    if len(df) < 10000:
+        st.toast("🌐 Running in Live Performance Mode", icon="⚡")
+    else:
+        st.toast("✅ Dataset initialized successfully!", icon="📊")
 
 # --- SIDEBAR ---
 with st.sidebar:
