@@ -4,23 +4,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Uber Analytics | Advanced Executive Dashboard</title>
+  <title>Uber Analytics | Executive Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #3f6ad8;
-      --primary-light: #e0f3ff;
-      --bg: #f1f4f6;
-      --text-main: #495057;
-      --text-muted: #888;
-      --card-bg: #fff;
+      /* Premium Color Palette */
+      --bg-body: #f8f9fa;
+      --bg-sidebar: #ffffff;
+      --bg-card: #ffffff;
+      --primary: #2c3e50;
+      /* Deep Slate */
+      --accent: #000000;
+      /* Uber Black */
+      --highlight: #276ef1;
+      /* Uber Blue */
+      --text-main: #333333;
+      --text-muted: #6c757d;
       --border: #e9ecef;
-      --success: #3ac47d;
-      --danger: #d92550;
-      --warning: #f7b924;
-      --info: #16aaff;
-      --radius: 12px;
-      --shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03), 0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05), 0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+
+      /* Dimensions */
+      --sidebar-width: 280px;
+      --header-height: 70px;
+
+      /* Effects */
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius: 16px;
+      --transition: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -31,780 +44,550 @@
 
     body {
       font-family: 'Outfit', sans-serif;
-      background: var(--bg);
+      background: var(--bg-body);
       color: var(--text-main);
-      font-size: 14px;
-      overflow-x: hidden;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
     }
 
-    /* --- LAYOUT --- */
-    header {
-      height: 65px;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
+    /* --- SIDEBAR --- */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      z-index: 100;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 40px;
+      letter-spacing: -0.5px;
+      padding-left: 12px;
+    }
+
+    .nav-group {
+      margin-bottom: 30px;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 15px;
+      padding-left: 12px;
+    }
+
+    .nav-item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      padding: 12px 16px;
+      margin-bottom: 4px;
+      border-radius: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s var(--transition);
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
     }
 
-    .header-brand {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #333;
-      letter-spacing: -0.5px;
+    .nav-item:hover,
+    .nav-item.active {
+      background: #f1f3f5;
+      color: var(--accent);
     }
 
-    #dashboard-grid {
-      position: relative;
-      padding: 40px;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-auto-rows: minmax(100px, auto);
-      gap: 30px;
-      min-height: 100vh;
+    .nav-item.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    /* --- CARD STYLES --- */
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 25px;
+    /* --- MAIN CONTENT --- */
+    .main-content {
+      flex: 1;
       display: flex;
       flex-direction: column;
       position: relative;
-      cursor: grab;
-      transition: transform 0.2s, box-shadow 0.2s;
-      user-select: none;
       overflow: hidden;
     }
 
-    .card:active {
-      cursor: grabbing;
+    /* --- DYNAMIC VIEWS (SPA) --- */
+    .view-container {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      padding: 0;
     }
 
-    .card.dragging {
-      opacity: 0.9;
-      z-index: 2000;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      border: 2px solid var(--primary);
+    .view-section {
+      padding: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      display: none;
+      /* Hidden by default */
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #f8f9fa;
-      padding-bottom: 15px;
+    .view-section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .card-title {
-      font-size: 0.9rem;
+    /* --- HEADER & HERO --- */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-title {
+      font-size: 32px;
       font-weight: 700;
-      color: #666;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+
+    .page-subtitle {
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-size: 16px;
+    }
+
+    /* --- DASHBOARD GRID --- */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .span-2 {
+      grid-column: span 2;
+    }
+
+    .span-4 {
+      grid-column: span 4;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    /* --- GRID SPANS (Default Layout) --- */
-    .card-metrics {
-      grid-column: span 12;
-    }
-
-    .card-revenue {
-      grid-column: span 8;
-      grid-row: span 3;
-    }
-
-    .card-summary {
-      grid-column: span 4;
-      grid-row: span 3;
-    }
-
-    .card-categories {
-      grid-column: span 6;
-      grid-row: span 4;
-    }
-
-    .card-leaderboard {
-      grid-column: span 6;
-      grid-row: span 4;
-    }
-
-    .card-table {
-      grid-column: span 12;
-    }
-
-    /* --- WIDGET 1: KEY METRICS --- */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      width: 100%;
-    }
-
-    .metric-item {
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid #f0f3f5;
-      transition: 0.3s;
-    }
-
-    .metric-item:hover {
-      background: #fcfdfe;
-      border-color: var(--primary);
-    }
-
-    .metric-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-
-    .metric-val-row {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .metric-val {
-      font-size: 1.8rem;
+    .stat-value {
+      font-size: 36px;
       font-weight: 700;
-      color: #333;
+      color: var(--accent);
+      margin: 8px 0;
     }
 
-    .metric-trend {
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 4px;
+    .stat-trend {
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .trend-up {
-      background: #e0fbf0;
       color: var(--success);
     }
 
     .trend-down {
-      background: #fff1f4;
       color: var(--danger);
     }
 
-    /* --- WIDGET 2: REVENUE CHART (SVG) --- */
-    .chart-container {
+    /* --- LANDING HERO --- */
+    .hero {
+      background: linear-gradient(135deg, #1f1f1f 0%, #000000 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 60px;
       position: relative;
-      flex: 1;
-      min-height: 250px;
-      width: 100%;
-      border-top: 1px solid #f8f9fa;
-      padding-top: 20px;
-    }
-
-    .svg-chart {
-      width: 100%;
-      height: 100%;
-    }
-
-    .chart-tooltip {
-      position: absolute;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s;
-      z-index: 100;
-    }
-
-    /* --- WIDGET 3: CATEGORY BARS --- */
-    .cat-item {
-      margin-bottom: 25px;
-    }
-
-    .cat-label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-
-    .cat-bar-wrap {
-      height: 12px;
-      background: #f0f3f5;
-      border-radius: 6px;
       overflow: hidden;
-      display: flex;
+      margin-bottom: 40px;
     }
 
-    .cat-bar-fill {
-      height: 100%;
-      transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    /* --- WIDGET 4: LEADERBOARD --- */
-    .leader-item {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 15px 0;
-      border-bottom: 1px solid #f8f9fa;
-    }
-
-    .leader-item:last-child {
-      border-bottom: none;
-    }
-
-    .rank {
-      width: 30px;
-      font-weight: 700;
-      color: var(--primary);
-      font-size: 1.1rem;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #eee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-    }
-
-    .leader-info {
-      flex: 1;
-    }
-
-    .leader-name {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .leader-score {
-      font-weight: 700;
-      color: #333;
-    }
-
-    /* --- WIDGET 5: DATA TABLE --- */
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th {
-      text-align: left;
-      padding: 15px;
-      border-bottom: 2px solid var(--border);
-      cursor: pointer;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    th:hover {
-      color: var(--primary);
-    }
-
-    td {
-      padding: 15px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .status-badge {
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .status-badge.active {
-      background: #e0f3ff;
-      color: #0366d6;
-    }
-
-    .status-badge.complete {
-      background: #e0fbf0;
-      color: var(--success);
-    }
-
-    .status-badge.pending {
-      background: #fff8e6;
-      color: #f39c12;
-    }
-
-    .action-btn {
-      background: #f8f9fa;
-      border: 1px solid #ddd;
-      padding: 5px 12px;
-      border-radius: 4px;
+    .hero-badge {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 6px 16px;
+      border-radius: 20px;
       font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-block;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* --- BUTTONS --- */
+    .btn {
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 600;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s;
+      border: none;
+      font-size: 15px;
     }
 
-    .action-btn:hover {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
+    .btn-primary {
+      background: #ffffff;
+      color: #000000;
     }
 
-    /* --- WIDGET 6: KPI SUMMARY --- */
-    .summary-val {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #333;
-      margin: 15px 0;
-    }
-
-    .sparkline {
-      width: 100%;
-      height: 80px;
-    }
-
-    /* --- RESPONSIVE --- */
-    @media (max-width: 1200px) {
-      .card-revenue {
-        grid-column: span 12;
-      }
-
-      .card-summary {
-        grid-column: span 12;
-      }
-
-      .card-categories {
-        grid-column: span 12;
-      }
-
-      .card-leaderboard {
-        grid-column: span 12;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .metrics-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      #dashboard-grid {
-        padding: 20px;
-        gap: 20px;
-      }
+    .btn-primary:hover {
+      background: #f0f0f0;
+      transform: translateY(-1px);
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <div class="header-brand">Uber Analytics Showcase</div>
-    <div style="font-weight: 500; color: #888;">Live Performance Monitor • Jan 2024</div>
-  </header>
+  <!-- SIDEBAR NAV -->
+  <nav class="sidebar">
+    <div class="brand">Uber Analytics.</div>
 
-  <div id="dashboard-grid">
-    <!-- 1. Key Metrics Overview -->
-    <div class="card card-metrics" id="card-metrics" data-pos="1">
-      <div class="card-header">
-        <span class="card-title">Real-time Performance Metrics</span>
-        <span>⋮</span>
-      </div>
-      <div class="metrics-grid">
-        <div class="metric-item">
-          <p class="metric-label">Total Volume</p>
-          <div class="metric-val-row">
-            <span class="metric-val">148,662</span>
-            <span class="metric-trend trend-up">↑ 12%</span>
+    <div class="nav-group">
+      <div class="nav-label">Main</div>
+      <a onclick="navigateTo('home')" id="nav-home" class="nav-item">
+        <span>Overview Showcase</span>
+      </a>
+      <a onclick="navigateTo('dashboard')" id="nav-dashboard" class="nav-item">
+        <span>Exec Dashboard</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Analysis Modules</div>
+      <a onclick="navigateTo('performance')" id="nav-performance" class="nav-item">
+        <span>Performance Deep-Dive</span>
+      </a>
+      <a onclick="navigateTo('cancellations')" id="nav-cancellations" class="nav-item">
+        <span>Cancellation Root Cause</span>
+      </a>
+    </div>
+
+    <div style="margin-top:auto; font-size: 12px; color: #999;">
+      Project by Divya Dhole<br>v2.4.0 Live Build
+    </div>
+  </nav>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="main-content">
+
+    <div class="view-container">
+
+      <!-- SECTION: HOME / OVERVIEW -->
+      <section id="view-home" class="view-section">
+        <div class="hero">
+          <span class="hero-badge">Portfolio Case Study</span>
+          <h1 style="font-size: 48px; margin-bottom: 24px; line-height: 1.1;">Advanced Analytics <br>Architecture</h1>
+          <p style="font-size: 18px; opacity: 0.8; max-width: 600px; margin-bottom: 40px; line-height: 1.6;">
+            A comprehensive analysis of 150k+ Uber ride records. This interactive application demonstrates high-volume
+            data processing, strategic KPI tracking, and conversion optimization insights.
+          </p>
+          <button class="btn btn-primary" onclick="navigateTo('dashboard')">Launch Executive Dashboard &rarr;</button>
+        </div>
+
+        <div class="grid-container">
+          <div class="card span-2">
+            <h3 class="stat-label">Total Volume</h3>
+            <div class="stat-value">148,562</div>
+            <div style="font-size: 14px; color: var(--text-muted);">Validated Ride Records</div>
+          </div>
+          <div class="card span-2">
+            <h3 class="stat-label">Total GMV</h3>
+            <div class="stat-value">₹24.8M</div>
+            <div style="font-size: 14px; color: var(--text-muted);">Gross Merchandise Value</div>
           </div>
         </div>
-        <div class="metric-item">
-          <p class="metric-label">Active Users</p>
-          <div class="metric-val-row">
-            <span class="metric-val">42.5K</span>
-            <span class="metric-trend trend-up">↑ 8%</span>
+      </section>
+
+      <!-- SECTION: DASHBOARD -->
+      <section id="view-dashboard" class="view-section">
+        <div class="page-header">
+          <h2 class="page-title">Executive Dashboard</h2>
+          <p class="page-subtitle">Real-time monitoring of key performance indicators.</p>
+        </div>
+
+        <div class="grid-container">
+          <div class="card stat-card">
+            <span class="stat-label">Ride Requests</span>
+            <div class="stat-value">42.5K</div>
+            <div class="stat-trend trend-up"><span>&uarr; 12%</span> vs last month</div>
+          </div>
+          <div class="card stat-card">
+            <span class="stat-label">Completion Rate</span>
+            <div class="stat-value">62.4%</div>
+            <div class="stat-trend trend-down"><span>&darr; 2.1%</span> requires attention</div>
+          </div>
+          <div class="card stat-card">
+            <span class="stat-label">Revenue (Net)</span>
+            <div class="stat-value">₹8.2M</div>
+            <div class="stat-trend trend-up"><span>&uarr; 8.4%</span> above target</div>
+          </div>
+          <div class="card stat-card">
+            <span class="stat-label">Avg. Rating</span>
+            <div class="stat-value">4.8</div>
+            <div class="stat-trend trend-up"><span>&uarr;</span> stable</div>
           </div>
         </div>
-        <div class="metric-item">
-          <p class="metric-label">Conversion Rate</p>
-          <div class="metric-val-row">
-            <span class="metric-val">62.1%</span>
-            <span class="metric-trend trend-down">↓ 3%</span>
+
+        <div class="grid-container">
+          <div class="card span-4" style="height: 400px; display: flex; flex-direction: column;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+              <span class="stat-label">Revenue Trend (6 Months)</span>
+            </div>
+            <!-- SVG Chart Placeholder -->
+            <svg viewBox="0 0 800 200" style="width: 100%; height: 100%; overflow: visible;">
+              <path d="M0,150 Q100,50 200,120 T400,80 T600,140 T800,40" fill="none" stroke="var(--highlight)"
+                stroke-width="3" />
+              <circle cx="0" cy="150" r="4" fill="var(--highlight)" />
+              <circle cx="200" cy="120" r="4" fill="var(--highlight)" />
+              <circle cx="400" cy="80" r="4" fill="var(--highlight)" />
+              <circle cx="600" cy="140" r="4" fill="var(--highlight)" />
+              <circle cx="800" cy="40" r="4" fill="var(--highlight)" />
+
+              <!-- Gradient Fill -->
+              <path d="M0,150 Q100,50 200,120 T400,80 T600,140 T800,40 V200 H0 Z" fill="var(--highlight)"
+                opacity="0.1" />
+            </svg>
           </div>
         </div>
-        <div class="metric-item">
-          <p class="metric-label">Gross Revenue</p>
-          <div class="metric-val-row">
-            <span class="metric-val">₹24.8M</span>
-            <span class="metric-trend trend-up">↑ 15%</span>
+      </section>
+
+      <!-- SECTION: PERFORMANCE -->
+      <section id="view-performance" class="view-section">
+        <div class="page-header">
+          <h2 class="page-title">Performance Deep-Dive</h2>
+          <p class="page-subtitle">Vehicle class efficiency and time-slot analysis.</p>
+        </div>
+
+        <div class="grid-container">
+          <!-- Chart: Vehicle Share -->
+          <div class="card span-2">
+            <h3 class="stat-label" style="margin-bottom: 20px;">Vehicle Class Distribution</h3>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;">
+                  <span>Premier Sedan</span>
+                  <span style="font-weight: 600;">35%</span>
+                </div>
+                <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                  <div style="height: 100%; width: 35%; background: var(--primary);"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;">
+                  <span>UberGo</span>
+                  <span style="font-weight: 600;">42%</span>
+                </div>
+                <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                  <div style="height: 100%; width: 42%; background: var(--highlight);"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;">
+                  <span>Moto / Auto</span>
+                  <span style="font-weight: 600;">23%</span>
+                </div>
+                <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                  <div style="height: 100%; width: 23%; background: var(--warning);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metric: Peak Hours -->
+          <div class="card span-2">
+            <h3 class="stat-label" style="margin-bottom: 20px;">Hourly Efficiency (Peak)</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center;">
+              <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                <div style="font-size: 12px; color: #888;">08:00 AM</div>
+                <div style="font-weight: 700; color: var(--success); margin-top: 4px;">88%</div>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                <div style="font-size: 12px; color: #888;">09:00 AM</div>
+                <div style="font-weight: 700; color: var(--success); margin-top: 4px;">92%</div>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                <div style="font-size: 12px; color: #888;">10:00 AM</div>
+                <div style="font-weight: 700; color: var(--warning); margin-top: 4px;">74%</div>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                <div style="font-size: 12px; color: #888;">05:00 PM</div>
+                <div style="font-weight: 700; color: var(--warning); margin-top: 4px;">68%</div>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                <div style="font-size: 12px; color: #888;">06:00 PM</div>
+                <div style="font-weight: 700; color: var(--danger); margin-top: 4px;">54%</div>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                <div style="font-size: 12px; color: #888;">07:00 PM</div>
+                <div style="font-weight: 700; color: var(--success); margin-top: 4px;">82%</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- 2. Revenue Trend Chart -->
-    <div class="card card-revenue" id="card-revenue" data-pos="2">
-      <div class="card-header">
-        <span class="card-title">Net Revenue Analysis (Last 12 Months)</span>
-      </div>
-      <div class="chart-container" id="revenue-chart-container">
-        <div class="chart-tooltip" id="chart-tooltip"></div>
-        <svg class="svg-chart" id="revenue-svg"></svg>
-      </div>
-    </div>
+      <!-- SECTION: CANCELLATIONS -->
+      <section id="view-cancellations" class="view-section">
+        <div class="page-header">
+          <h2 class="page-title">Cancellation Analysis</h2>
+          <p class="page-subtitle">Root cause identification and revenue impact.</p>
+        </div>
+        <div class="grid-container">
+          <div class="card span-2">
+            <h3 class="stat-label">Primary Cancellation Reasons</h3>
 
-    <!-- 6. Statistical Summary -->
-    <div class="card card-summary" id="card-summary" data-pos="3">
-      <div class="card-header">
-        <span class="card-title">Executive Sales Impact</span>
-      </div>
-      <p style="color: #888; margin-top: 10px;">Primary Performance Indicator</p>
-      <div class="summary-val">$245,670</div>
-      <p style="color: var(--success); font-weight: 600;">+ $12,400 since last month</p>
-      <div style="flex: 1; display: flex; align-items: flex-end; padding-top: 20px;">
-        <svg class="sparkline" viewBox="0 0 400 100">
-          <path d="M0 80 Q 50 20, 100 80 T 200 60 T 300 90 T 400 50" fill="none" stroke="var(--primary)"
-            stroke-width="4" stroke-linecap="round" />
-          <path d="M0 80 Q 50 20, 100 80 T 200 60 T 300 90 T 400 50 L 400 100 L 0 100 Z" fill="var(--primary)"
-            opacity="0.1" />
-        </svg>
-      </div>
-    </div>
+            <div
+              style="display: flex; align-items: center; justify-content: center; height: 200px; position: relative;">
+              <!-- Donut Chart representation using CSS conic-gradient -->
+              <div
+                style="width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(var(--danger) 0% 45%, var(--warning) 45% 75%, #e9ecef 75% 100%); display: flex; align-items: center; justify-content: center;">
+                <div
+                  style="width: 100px; height: 100px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                  <span style="font-weight: 700; font-size: 24px;">34%</span>
+                  <span style="font-size: 10px; color: #999;">Driver-Side</span>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 15px; justify-content: center; font-size: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <div style="width: 8px; height: 8px; background: var(--danger); border-radius: 50%;"></div> Driver Not
+                Found
+              </div>
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <div style="width: 8px; height: 8px; background: var(--warning); border-radius: 50%;"></div> User
+                Cancelled
+              </div>
+            </div>
+          </div>
 
-    <!-- 3. Category Breakdown -->
-    <div class="card card-categories" id="card-categories" data-pos="4">
-      <div class="card-header">
-        <span class="card-title">Revenue by Vehicle Class</span>
-      </div>
-      <div class="cat-item">
-        <div class="cat-label-row"><span>Premier Sedan</span><span>₹9.8M (39%)</span></div>
-        <div class="cat-bar-wrap">
-          <div class="cat-bar-fill" style="width: 39%; background: var(--primary);"></div>
-        </div>
-      </div>
-      <div class="cat-item">
-        <div class="cat-label-row"><span>Standard UberGo</span><span>₹7.5M (30%)</span></div>
-        <div class="cat-bar-wrap">
-          <div class="cat-bar-fill" style="width: 30%; background: var(--success);"></div>
-        </div>
-      </div>
-      <div class="cat-item">
-        <div class="cat-label-row"><span>Uber Auto</span><span>₹4.2M (17%)</span></div>
-        <div class="cat-bar-wrap">
-          <div class="cat-bar-fill" style="width: 17%; background: var(--warning);"></div>
-        </div>
-      </div>
-      <div class="cat-item">
-        <div class="cat-label-row"><span>Uber Moto</span><span>₹3.3M (14%)</span></div>
-        <div class="cat-bar-wrap">
-          <div class="cat-bar-fill" style="width: 14%; background: var(--danger);"></div>
-        </div>
-      </div>
-    </div>
+          <div class="card span-2">
+            <h3 class="stat-label">Loss Impact vs Recovery</h3>
+            <div style="margin-top: 30px;">
+              <div class="stat-value" style="font-size: 28px;">₹4.2M <span
+                  style="font-size: 16px; color: var(--danger); font-weight: 500;">Unrealized</span></div>
+              <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Estimated revenue loss due to
+                cancellations in high-demand zones.</p>
 
-    <!-- 4. Performance Leaderboard -->
-    <div class="card card-leaderboard" id="card-leaderboard" data-pos="5">
-      <div class="card-header">
-        <span class="card-title">Top Regional Commanders</span>
-      </div>
-      <div class="leader-item">
-        <div class="rank">#1</div>
-        <div class="avatar" style="background: var(--primary-light); color: var(--primary);">RG</div>
-        <div class="leader-info">
-          <p class="leader-name">Rick Goltier</p>
-          <p style="font-size: 0.75rem; color: #aaa;">Sector 44 Lead</p>
+              <div style="padding: 16px; background: #e0fbf0; border-radius: 8px; border: 1px solid #c3e6cb;">
+                <strong style="color: #155724; display: block; margin-bottom: 4px;">Recommended Action</strong>
+                <span style="font-size: 14px; color: #155724;">Increase driver incentives in "Sector 29" and "Cyber Hub"
+                  during peak hours (6-8 PM).</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="leader-score">15,442 pts</div>
-      </div>
-      <div class="leader-item">
-        <div class="rank">#2</div>
-        <div class="avatar" style="background: #e0fbf0; color: var(--success);">DH</div>
-        <div class="leader-info">
-          <p class="leader-name">Diana Hilman</p>
-          <p style="font-size: 0.75rem; color: #aaa;">NCR Central</p>
-        </div>
-        <div class="leader-score">12,870 pts</div>
-      </div>
-      <div class="leader-item">
-        <div class="rank">#3</div>
-        <div class="avatar" style="background: #fff8e6; color: var(--warning);">SM</div>
-        <div class="leader-info">
-          <p class="leader-name">Sam Melendez</p>
-          <p style="font-size: 0.75rem; color: #aaa;">Gurgaon Ops</p>
-        </div>
-        <div class="leader-score">11,200 pts</div>
-      </div>
-      <div class="leader-item">
-        <div class="rank">#4</div>
-        <div class="avatar" style="background: #f8f9fa;">AK</div>
-        <div class="leader-info">
-          <p class="leader-name">Arjun Kapoor</p>
-          <p style="font-size: 0.75rem; color: #aaa;">Noida East</p>
-        </div>
-        <div class="leader-score">9,410 pts</div>
-      </div>
-    </div>
+      </section>
 
-    <!-- 5. Data Table -->
-    <div class="card card-table" id="card-table" data-pos="6">
-      <div class="card-header">
-        <span class="card-title">Regional Trip Analytics</span>
-        <div class="header-right">
-          <button class="action-btn">Export CSV</button>
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table id="analytics-table">
-          <thead>
-            <tr>
-              <th onclick="sortTable(0)">Trip ID</th>
-              <th onclick="sortTable(1)">Vehicle</th>
-              <th onclick="sortTable(2)">Revenue</th>
-              <th onclick="sortTable(3)">Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-            <!-- Dynamic Rows -->
-          </tbody>
-        </table>
-      </div>
+      </section>
+
     </div>
+  </main>
+
   </div>
+  </main>
 
-  <!-- Scripts -->
+  <!-- ROUTING ENGINE -->
   <script>
-    // --- MOCK DATA ---
-    const tableData = [
-      { id: "#UB-7721", vehicle: "Premier Sedan", revenue: "₹842", status: "complete" },
-      { id: "#UB-7722", vehicle: "Uber Go", revenue: "₹450", status: "complete" },
-      { id: "#UB-7723", vehicle: "Uber Auto", revenue: "₹210", status: "pending" },
-      { id: "#UB-7724", vehicle: "Premier Sedan", revenue: "₹1,200", status: "active" },
-      { id: "#UB-7725", vehicle: "Uber Moto", revenue: "₹120", status: "complete" },
-      { id: "#UB-7726", vehicle: "Uber Pool", revenue: "₹330", status: "complete" },
-      { id: "#UB-7727", vehicle: "Uber Go", revenue: "₹480", status: "pending" },
-      { id: "#UB-7728", vehicle: "Premier Sedan", revenue: "₹990", status: "active" }
-    ];
-
-    const revenueData = [210, 350, 280, 480, 520, 410, 680, 720, 630, 840, 910, 870];
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-    // --- TABLE GENERATION & SORTING ---
-    function renderTable(data) {
-      const body = document.getElementById('table-body');
-      body.innerHTML = data.map(row => `
-            <tr>
-                <td style="font-weight: 600;">${row.id}</td>
-                <td>${row.vehicle}</td>
-                <td style="font-weight: 700;">${row.revenue}</td>
-                <td><span class="status-badge ${row.status}">${row.status}</span></td>
-                <td><button class="action-btn" onclick="alert('Viewing Details for ${row.id}')">View</button></td>
-            </tr>
-        `).join('');
-    }
-
-    let sortDir = 1;
-    function sortTable(idx) {
-      const keys = ['id', 'vehicle', 'revenue', 'status'];
-      const sorted = [...tableData].sort((a, b) => {
-        const valA = a[keys[idx]].replace(/[₹,#]/g, '');
-        const valB = b[keys[idx]].replace(/[₹,#]/g, '');
-        return (isNaN(valA) ? valA.localeCompare(valB) : valA - valB) * sortDir;
-      });
-      sortDir *= -1;
-      renderTable(sorted);
-    }
-
-    // --- SVG REVENUE CHART ---
-    function renderRevenueChart() {
-      const svg = document.getElementById('revenue-svg');
-      const container = document.getElementById('revenue-chart-container');
-      const tooltip = document.getElementById('chart-tooltip');
-
-      const width = container.offsetWidth;
-      const height = container.offsetHeight - 40;
-      const padding = 40;
-
-      const maxVal = Math.max(...revenueData) * 1.2;
-      const xStep = (width - padding * 2) / (revenueData.length - 1);
-
-      // Generate Area Path
-      let pathD = `M ${padding} ${height}`;
-      let lineD = `M ${padding} ${height - (revenueData[0] / maxVal) * (height - padding)}`;
-
-      const points = revenueData.map((val, i) => ({
-        x: padding + i * xStep,
-        y: height - (val / maxVal) * (height - padding)
-      }));
-
-      points.forEach((p, i) => {
-        if (i === 0) return;
-        lineD += ` L ${p.x} ${p.y}`;
-      });
-
-      pathD = lineD + ` L ${points[points.length - 1].x} ${height} Z`;
-
-      svg.innerHTML = `
-            <defs>
-                <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:var(--primary);stop-opacity:0.2" />
-                    <stop offset="100%" style="stop-color:var(--primary);stop-opacity:0" />
-                </linearGradient>
-            </defs>
-            <path d="${pathD}" fill="url(#areaGrad)" />
-            <path d="${lineD}" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" />
-            ${points.map((p, i) => `
-                <circle cx="${p.x}" cy="${p.y}" r="4" fill="#fff" stroke="var(--primary)" stroke-width="2" 
-                    onmouseenter="showTooltip(evt, '${months[i]}', '₹${revenueData[i]}K')" 
-                    onmouseleave="hideTooltip()" 
-                    style="cursor:pointer" />
-            `).join('')}
-            ${months.map((m, i) => `
-                <text x="${padding + i * xStep}" y="${height + 25}" text-anchor="middle" fill="#aaa" style="font-size:10px">${m}</text>
-            `).join('')}
-        `;
-    }
-
-    window.showTooltip = (evt, label, value) => {
-      const tooltip = document.getElementById('chart-tooltip');
-      tooltip.innerHTML = `<strong>${label}</strong>: ${value}`;
-      tooltip.style.opacity = '1';
-      tooltip.style.left = (evt.clientX - 50) + 'px';
-      tooltip.style.top = (evt.clientY - 60) + 'px';
+    // State Management
+    const state = {
+      currentView: 'home',
+      history: ['home']
     };
 
-    window.hideTooltip = () => {
-      document.getElementById('chart-tooltip').style.opacity = '0';
+    function navigateTo(viewId) {
+      if (state.currentView === viewId) return;
+
+      // Push to browser history
+      history.pushState({ view: viewId }, null, `#${viewId}`);
+
+      updateView(viewId);
+    }
+
+
+
+    // View Updater
+    function updateView(viewId) {
+      // Update State
+      state.currentView = viewId;
+
+      // 1. Update Sidebar Active State
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      const activeNav = document.getElementById(`nav-${viewId}`);
+      if (activeNav) activeNav.classList.add('active');
+
+      // 2. Transition Views
+      document.querySelectorAll('.view-section').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      const targetView = document.getElementById(`view-${viewId}`);
+      if (targetView) {
+        targetView.classList.add('active');
+      }
+
+      // Scroll to top
+      document.querySelector('.view-container').scrollTop = 0;
+    }
+
+    // Handle Back/Forward Buttons
+    window.onpopstate = function (event) {
+      if (event.state && event.state.view) {
+        updateView(event.state.view);
+      } else {
+        // Handle initial load or empty hash
+        const hash = window.location.hash.replace('#', '');
+        updateView(hash || 'home');
+      }
     };
 
-    // --- DRAG & DROP ENGINE ---
-    const grid = document.getElementById('dashboard-grid');
-    let cards = document.querySelectorAll('.card');
-    let isDragging = false;
-    let activeCard = null;
-    let startX, startY;
-    let cardOffX, cardOffY;
-
-    function initDrag() {
-      cards.forEach(card => {
-        card.addEventListener('mousedown', startDrag);
-      });
-    }
-
-    function startDrag(e) {
-      if (e.target.tagName === 'BUTTON') return;
-      isDragging = true;
-      activeCard = this;
-
-      const rect = activeCard.getBoundingClientRect();
-      cardOffX = e.clientX - rect.left;
-      cardOffY = e.clientY - rect.top;
-
-      activeCard.classList.add('dragging');
-      activeCard.style.position = 'fixed';
-      activeCard.style.width = rect.width + 'px';
-      activeCard.style.height = rect.height + 'px';
-
-      moveAt(e.clientX, e.clientY);
-    }
-
-    function moveAt(x, y) {
-      if (!activeCard) return;
-      activeCard.style.left = (x - cardOffX) + 'px';
-      activeCard.style.top = (y - cardOffY) + 'px';
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      moveAt(e.clientX, e.clientY);
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.replace('#', '');
+      updateView(hash || 'home');
     });
 
-    document.addEventListener('mouseup', (e) => {
-      if (!isDragging) return;
-      isDragging = false;
-
-      // Find best sibling to swap with
-      const siblings = [...grid.children].filter(child => child !== activeCard);
-      let bestTarget = null;
-      let minDistance = Infinity;
-
-      siblings.forEach(sibling => {
-        const rect = sibling.getBoundingClientRect();
-        const dist = Math.hypot(e.clientX - (rect.left + rect.width / 2), e.clientY - (rect.top + rect.height / 2));
-        if (dist < minDistance && dist < 300) {
-          minDistance = dist;
-          bestTarget = sibling;
-        }
-      });
-
-      if (bestTarget) {
-        const activePos = activeCard.dataset.pos;
-        const targetPos = bestTarget.dataset.pos;
-
-        // Re-append for visual ordering
-        const children = [...grid.children];
-        const activeIdx = children.indexOf(activeCard);
-        const targetIdx = children.indexOf(bestTarget);
-
-        if (activeIdx < targetIdx) {
-          grid.insertBefore(activeCard, bestTarget.nextSibling);
-        } else {
-          grid.insertBefore(activeCard, bestTarget);
-        }
-
-        saveLayout();
-      }
-
-      activeCard.classList.remove('dragging');
-      activeCard.style.position = '';
-      activeCard.style.width = '';
-      activeCard.style.height = '';
-      activeCard.style.left = '';
-      activeCard.style.top = '';
-      activeCard = null;
-    });
-
-    // --- PERSISTENCE ---
-    function saveLayout() {
-      const order = [...grid.children].map(c => c.id);
-      localStorage.setItem('uber-dash-layout', JSON.stringify(order));
-    }
-
-    function loadLayout() {
-      const order = JSON.parse(localStorage.getItem('uber-dash-layout'));
-      if (order) {
-        order.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) grid.appendChild(el);
-        });
-      }
-    }
-
-    // --- INITIALIZE ---
-    window.addEventListener('load', () => {
-      loadLayout();
-      renderTable(tableData);
-      renderRevenueChart();
-      initDrag();
-    });
-
-    window.addEventListener('resize', renderRevenueChart);
   </script>
-
 </body>
 
 </html>

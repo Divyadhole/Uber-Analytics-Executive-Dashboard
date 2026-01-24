@@ -1,16 +1,56 @@
-# React + Vite
+# Uber Analytics | Executive Portfolio Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### [🚀 Live Demo](https://divyadhole.github.io/Uber-Analytics-Executive-Dashboard/)
 
-Currently, two official plugins are available:
+A comprehensive, interactive analytics portfolio transforming 150,000+ Uber ride records into actionable strategic insights. This project demonstrates advanced data visualization, single-page application (SPA) architecture, and executive-level reporting capabilities.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 📊 Project Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This application serves as an interactive case study for high-volume data processing and conversion optimization. It is built to simulate a real-world executive monitoring environment where decision-makers can track performace in real-time.
 
-## Expanding the ESLint configuration
+**Key Metrics Analyzed:**
+- **Volume:** 148,000+ Validated Ride Records
+- **Revenue:** ₹24.8M Gross Merchandise Value (GMV)
+- **Conversion:** Analysis of Booking vs. Completion rates
+- **Efficiency:** Time-slot performance and vehicle class distribution
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ⚡ Key Features
+
+- **Advanced SPA Navigation:** Custom-built routing engine supporting deep-linking and browser history (Back/Forward navigation).
+- **Interactive Dashboard:** Draggable, responsive cards displaying real-time KPIs and trendlines.
+- **Performance Deep-Dive:** Granular analysis of vehicle classes (Premier, UberGo, Moto) and their hourly efficiency.
+- **Cancellation Root Cause:** Visual breakdown of cancellation drivers (User vs. Driver) with revenue impact estimation.
+- **Premium Design System:**
+  - Modern "Outfit" typography
+  - Glassmorphism effects and smooth gradients
+  - Fully responsive sidebar layout
+
+---
+
+## 🛠️ Tech Stack
+
+- **Core:** HTML5, CSS3, Vanilla JavaScript (ES6+)
+- **Architecture:** Client-Side Rendering (SPA) with History API
+- **Design:** CSS Variables, Flexbox/Grid, Custom Animations
+- **Deployment:** GitHub Pages
+
+---
+
+## 🚀 Deployment
+
+This project is deployed using standard web technologies.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Divyadhole/Uber-Analytics-Executive-Dashboard.git
+   ```
+2. Open `index.html` in your browser.
+
+---
+
+**Author:** Divya Dhole  
+*Data Analytics & Engineering Portfolio*
