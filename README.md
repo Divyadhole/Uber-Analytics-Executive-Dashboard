@@ -58,9 +58,9 @@ We built an **Enterprise-Grade Analytics Pipeline** that doesn't just report new
 
 | **Peak Hour Pulse** 🟣 | **Fleet Efficiency Matrix** 🟢 |
 |:---:|:---:|
-| <img src="visualizations/hourly_volume.png" width="400"/> | <img src="visualizations/vehicle_completion.png" width="400"/> |
+| <img src="Uber-Analytics/visualizations/hourly_volume.png" width="400"/> | <img src="Uber-Analytics/visualizations/vehicle_completion.png" width="400"/> |
 | **Revenue Ecosystem** 💰 | **Friction Points** ⚠️ |
-| <img src="visualizations/revenue_share.png" width="400"/> | <img src="visualizations/cancellation_reasons.png" width="400"/> |
+| <img src="Uber-Analytics/visualizations/revenue_share.png" width="400"/> | <img src="Uber-Analytics/visualizations/cancellation_reasons.png" width="400"/> |
 
 </div>
 
@@ -78,14 +78,16 @@ We built an **Enterprise-Grade Analytics Pipeline** that doesn't just report new
 ## 📁 Classified Files (Structure)
 
 ```
-Uber-Analytics/
-├── 📊 data/                 # The Raw Intel
-├── 🐍 python/               # The Source Code
-│   ├── transform_data.py    # Cleaning Agent
-│   ├── ml_model.py          # Prediction Brain
-│   └── create_poster.py     # Art Generator
-├── 🤖 models/               # The Serialized Mind
-└── PROJECT_POSTER.png       # The Executive Summary
+Project Root
+├── README.md                # The Project Documentation
+├── PROJECT_POSTER.png       # The Executive Summary
+└── Uber-Analytics/
+    ├── 📊 data/                 # The Raw Intel
+    ├── 🐍 python/               # The Source Code
+    │   ├── transform_data.py    # Cleaning Agent
+    │   ├── ml_model.py          # Prediction Brain
+    │   └── create_poster.py     # Art Generator
+    └── 🤖 models/               # The Serialized Mind
 ```
 
 ---
