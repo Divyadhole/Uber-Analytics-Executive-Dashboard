@@ -146,3 +146,4 @@ cython_debug/
 
 # OS X
 .DS_Store
+Uber-Analytics/models/*.pkl
